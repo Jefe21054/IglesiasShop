@@ -1,2 +1,2 @@
 # IglesiasShop
-E-Commerce project, created with Django &amp; Python.
+Complete E-Commerce project, created with Django &amp; Python.
