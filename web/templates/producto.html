@@ -12,12 +12,20 @@
                 <ul class="slides">
                     <li>
                         <a data-fancybox-group="prod" class="fancy-img" href="#">
-                            <img src="https://via.placeholder.com/250" alt="">
+                            {% if producto.imagen %}
+                                <img src="{{producto.imagen.url}}" alt="">
+                            {% else %}
+                                <img src="https://via.placeholder.com/250" alt="">
+                            {% endif %}
                         </a>
                     </li>
                     <li>
                         <a data-fancybox-group="prod" class="fancy-img" href="#">
-                            <img src="https://via.placeholder.com/250" alt="">
+                            {% if producto.imagen %}
+                                <img src="{{producto.imagen.url}}" alt="">
+                            {% else %}
+                                <img src="https://via.placeholder.com/250" alt="">
+                            {% endif %}
                         </a>
                     </li>
                 </ul>
@@ -28,10 +36,18 @@
             <div class="flexslider prod-thumbs" id="prod-thumbs">
                 <ul class="slides">
                     <li>
-                        <img src="https://via.placeholder.com/250" alt="">
+                        {% if producto.imagen %}
+                                <img src="{{producto.imagen.url}}" alt="">
+                            {% else %}
+                                <img src="https://via.placeholder.com/250" alt="">
+                            {% endif %}
                     </li>
                     <li>
-                        <img src="https://via.placeholder.com/250" alt="">
+                        {% if producto.imagen %}
+                                <img src="{{producto.imagen.url}}" alt="">
+                            {% else %}
+                                <img src="https://via.placeholder.com/250" alt="">
+                            {% endif %}
                     </li>
                 </ul>
             </div>
@@ -48,12 +64,13 @@
                 </p>
                 <p class="prod-rating-count">7</p>
             </div>
-            <p class="prod-categs"><a href="#">Polos</a></p>
-            <h1>PRODUCTO MUESTRA</h1>
+
+            <p class="prod-categs"><a href="{% url 'web:categ' categ.id %}">{{producto.categoria}}</a></p>
+
+            <h1>{{producto.nombre}}</h1>
             <div class="variations_form cart">
-                <p class="prod-price">$100</p>
-                <p class="prod-excerpt">Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. 
-                    Vestibulum tortor quam, feugiat vitae, ultricies eget... 
+                <p class="prod-price">${{producto.precio}}</p>
+                <p class="prod-excerpt">{{producto.descripcion}}... 
                     <a id="prod-showdesc" class="prod-excerpt-more" href="#">read more</a></p>
                 <div class="prod-add">
                     <form action="#" method="post">
