@@ -27,3 +27,17 @@ def productosPorCategoria(request,categoria_id):
     }
 
     return render(request,'index.html',context)
+
+def productosPorNombre(request):
+    ''' VISTA PARA FILTRAR PRODUCTOS POR NOMBRE '''
+    nombre = request.POST['nombre']
+    
+    listaProductos = Producto.objects.filter(nombre__contains=nombre)
+    listaCategorias = Categoria.objects.all()
+
+    context = {
+        'categorias':listaCategorias,
+        'productos':listaProductos,
+    }
+
+    return render(request,'index.html',context)
