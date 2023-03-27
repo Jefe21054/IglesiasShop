@@ -1,6 +1,9 @@
 from django.shortcuts import render,get_object_or_404,redirect
-from .models import Categoria,Producto
+from .models import Categoria,Producto,Cliente
 from .carrito import Cart
+from django.contrib.auth.models import User
+from django.contrib.auth import login,logout,authenticate
+from .forms import ClienteForm
 
 # Create your views here.
 
@@ -102,6 +105,107 @@ def limpiarCarrito(request):
 
     return render(request,'carrito.html')
 
+''' VISTAS PARA CLIENTES Y USUARIOS '''
+
+def crearUsuario(request):
+    
+    if request.method == 'POST':
+        dataUsuario = request.POST['nuevoUsuario']
+        dataPassword = request.POST['nuevoPassword']
+
+        nuevoUsuario = User.objects.create_user(username=dataUsuario,password=dataPassword)
+        if nuevoUsuario is not None:
+            login(request,nuevoUsuario)
+            return redirect('/cuenta')
+    
+    return render(request,'login.html')
+
+def cuentaUsuario(request):
+    
+    try:
+        clienteEditar = Cliente.objects.get(usuario = request.user)
+        
+        dataCliente = {
+            'nombre':request.user.first_name,
+            'apellidos':request.user.last_name,
+            'email':request.user.email,
+            'direccion':clienteEditar.direccion,
+            'telefono':clienteEditar.telefono,
+            'cedula':clienteEditar.cedula,
+            'sexo':clienteEditar.sexo,
+            'fecha_nacimiento':clienteEditar.fecha_nacimiento,
+        }
+    except:
+        dataCliente = {
+            'nombre':request.user.first_name,
+            'apellidos':request.user.last_name,
+            'email':request.user.email,
+        }
+
+
+    frmCliente = ClienteForm(dataCliente)
+
+    context = {
+        'frmCliente':frmCliente,
+    }
+    
+    return render(request,'cuenta.html',context)
+
+def actualizarCliente(request):
+    mensaje=''
+
+    if request.method == 'POST':
+        frmCliente = ClienteForm(request.POST)
+        if frmCliente.is_valid():
+            dataCliente = frmCliente.cleaned_data
+
+            #Actualizacion del Usuario
+            actUsuario = User.objects.get(pk=request.user.id)
+            actUsuario.first_name = dataCliente['nombre']
+            actUsuario.last_name = dataCliente['apellidos']
+            actUsuario.email = dataCliente['email']
+            actUsuario.save()
+
+            #Registro de Cliente
+            nuevoCliente = Cliente()
+            nuevoCliente.usuario = actUsuario
+            nuevoCliente.cedula = dataCliente['cedula']
+            nuevoCliente.direccion = dataCliente['direccion']
+            nuevoCliente.telefono = dataCliente['telefono']
+            nuevoCliente.sexo = dataCliente['sexo']
+            nuevoCliente.fecha_nacimiento = dataCliente['fecha_nacimiento']
+            nuevoCliente.save()
+
+            mensaje = 'DATOS ACTUALIZADOS'
+
+    context ={
+        'mensaje':mensaje,
+        'frmCliente':frmCliente,
+    }
+    
+    return render(request,'cuenta.html')
+
+def loginUsuario(request):
+    context = {}
+
+    if request.method == 'POST':
+        dataUsuario = request.POST['usuario']
+        dataPassword = request.POST['password']
+
+        usuarioAuth = authenticate(request,username=dataUsuario,password=dataPassword)
+        if usuarioAuth is not None:
+            login(request,usuarioAuth)
+            return redirect('/cuenta')
+        else:
+            context = {
+                'mensajeError':'Datos Incorrectos'
+            }
+
+    return render(request,'login.html',context)
+
+def logoutUsuario(request):
+    pass
+
 def registrarPedido(request):
     pass
 
@@ -109,19 +213,4 @@ def confirmarPedido(request):
     pass
 
 def gracias(request):
-    pass
-
-def crearUsuario(request):
-    pass
-
-def cuentaUsuario(request):
-    pass
-
-def actualizarCliente(request):
-    pass
-
-def loginUsuario(request):
-    pass
-
-def logoutUsuario(request):
     pass
