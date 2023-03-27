@@ -65,3 +65,41 @@ def categ(request,categoria_id):
     objCategoria = get_object_or_404(Categoria,pk=categoria_id)
     
     return redirect('/productosPorCategoria/'+str(categoria_id))
+
+''' VISTAS PARA EL CARRITO DE COMPRAS '''
+
+def carrito(request):
+    return render(request,'carrito.html')
+
+def agregarCarrito(request,producto_id):
+    pass
+
+def eliminarProductoCarrito(request,producto_id):
+    pass
+
+def limpiarCarrito(request):
+    pass
+
+def registrarPedido(request):
+    pass
+
+def confirmarPedido(request):
+    pass
+
+def gracias(request):
+    pass
+
+def crearUsuario(request):
+    pass
+
+def cuentaUsuario(request):
+    pass
+
+def actualizarCliente(request):
+    pass
+
+def loginUsuario(request):
+    pass
+
+def logoutUsuario(request):
+    pass
