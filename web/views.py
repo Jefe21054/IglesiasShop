@@ -1,5 +1,6 @@
 from django.shortcuts import render,get_object_or_404,redirect
 from .models import Categoria,Producto
+from .carrito import Cart
 
 # Create your views here.
 
@@ -72,7 +73,15 @@ def carrito(request):
     return render(request,'carrito.html')
 
 def agregarCarrito(request,producto_id):
-    pass
+    cantidad = 1
+
+    objProducto = get_object_or_404(Producto,pk=producto_id)
+    carritoProducto = Cart(request)
+    carritoProducto.add(objProducto, cantidad)
+
+    print(request.session.get('cart'))
+
+    return render(request,'carrito.html')
 
 def eliminarProductoCarrito(request,producto_id):
     pass

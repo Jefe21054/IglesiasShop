@@ -11,7 +11,17 @@ class Cart:
         self.cart = cart
     
     def add(self,producto,cantidad):
-        pass
+        self.cart[producto.id] = {
+            'producto_id':producto.id,
+            'nombre':producto.nombre,
+            'cantidad':cantidad,
+            'precio':str(producto.precio),
+            'imagen':producto.imagen.url,
+            'categoria':producto.categoria.nombre,
+            'subtotal':str(cantidad*producto.precio),
+        }
+
+        self.save()
 
     def delete(self,producto):
         pass
@@ -20,5 +30,6 @@ class Cart:
         pass
 
     def save(self):
-        pass
-    
+        ''' GUARDA CAMBIOS EN CARRITO '''
+        self.session['cart'] = self.cart
+        self.session.modified = True
