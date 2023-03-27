@@ -73,7 +73,7 @@
                 <p class="prod-excerpt">{{producto.descripcion}}... 
                     <a id="prod-showdesc" class="prod-excerpt-more" href="#">read more</a></p>
                 <div class="prod-add">
-                    <form action="#" method="post">
+                    <form action="{% url 'web:agregarCarrito' producto.id %}" method="post">
                         {% csrf_token %}
                         <div class="variations">
                             <div class="variations-row">
@@ -81,14 +81,14 @@
                                 <div class="value">
                                     <select>
                                         <option value="">Choose an option</option>
-                                        <option value="blue">Blue</option>
-                                        <option value="green">Green</option>
-                                        <option value="yellow">Yellow</option>
+                                        <option value="black">Negro</option>
+                                        <option value="green">Verde</option>
+                                        <option value="white">Blanco</option>
                                     </select>
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" class="button"><i class="icon ion-android-cart"></i> Agregar al Carrito</button>
+                        <button type="submit" class="button"><i class="icon ion-android-cart"></i>Agregar al Carrito</button>
                         <p class="qnt-wrap prod-li-qnt">
                             <a href="#" class="qnt-plus prod-li-plus"><i class="icon ion-arrow-up-b"></i></a>
                             <input type="text" name="cantidad" value="1">

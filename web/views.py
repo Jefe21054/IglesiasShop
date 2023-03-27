@@ -73,7 +73,10 @@ def carrito(request):
     return render(request,'carrito.html')
 
 def agregarCarrito(request,producto_id):
-    cantidad = 1
+    if request.method == 'POST':
+        cantidad = int(request.POST['cantidad'])
+    else:
+        cantidad = 1
 
     objProducto = get_object_or_404(Producto,pk=producto_id)
     carritoProducto = Cart(request)
