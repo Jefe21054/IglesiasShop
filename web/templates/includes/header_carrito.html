@@ -23,7 +23,7 @@
             <p class="total"><b>Total:</b> ${{request.session.cartMontoTotal}}</p>
             <p class="buttons">
                 <a href="{% url 'web:carrito' %}" class="button">Ver Carrito</a>
-                <a href="#" class="button">Pedido</a>
+                <a href="{% url 'web:registrarPedido' %}" class="button">Pedido</a>
             </p>
         </div>
     </div>

@@ -1,9 +1,14 @@
 from django.shortcuts import render,get_object_or_404,redirect
-from .models import Categoria,Producto,Cliente
+from django.urls import reverse
+from .models import Categoria,Producto,Cliente,Pedido,PedidoDetalle
+from paypal.standard.forms import PayPalPaymentsForm
+from django.conf import settings
 from .carrito import Cart
 from django.contrib.auth.models import User
 from django.contrib.auth import login,logout,authenticate
 from .forms import ClienteForm
+from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
 
 # Create your views here.
 
@@ -144,7 +149,6 @@ def cuentaUsuario(request):
 
 
     frmCliente = ClienteForm(dataCliente)
-
     context = {
         'frmCliente':frmCliente,
     }
@@ -183,34 +187,55 @@ def actualizarCliente(request):
         'frmCliente':frmCliente,
     }
     
-    return render(request,'cuenta.html')
+    return render(request,'cuenta.html',context)
 
 def loginUsuario(request):
-    context = {}
+    paginaDestino = request.GET.get('next',None)
+    context = {
+        'destino':paginaDestino,
+    }
 
     if request.method == 'POST':
         dataUsuario = request.POST['usuario']
         dataPassword = request.POST['password']
+        dataDestino = request.POST['destino']
 
         usuarioAuth = authenticate(request,username=dataUsuario,password=dataPassword)
         if usuarioAuth is not None:
             login(request,usuarioAuth)
+            
+            if dataDestino != 'None':
+                return redirect(dataDestino)
+
             return redirect('/cuenta')
+
         else:
             context = {
-                'mensajeError':'Datos Incorrectos'
+                'mensajeError':'DATOS INCORRECTOS'
             }
 
     return render(request,'login.html',context)
 
 def logoutUsuario(request):
-    pass
+    logout(request)
+    return render(request,'login.html')
 
+''' VISTAS PARA EL PROCESO DE COMPRA '''
+
+@login_required(login_url='/login')
 def registrarPedido(request):
-    pass
+    frmCliente = ClienteForm()
 
+    context = {
+        'frmCliente':frmCliente,
+    }
+
+    return render(request,'pedido.html',context)
+
+@login_required(login_url='/login')
 def confirmarPedido(request):
     pass
 
+@login_required(login_url='/login')
 def gracias(request):
     pass
