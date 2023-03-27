@@ -5,10 +5,16 @@ class Cart:
         self.session = request.session
 
         cart = self.session.get('cart')
+        montoTotal = self.session.get('cartMontoTotal')
+        cantidadTotal = self.session.get('cartCantidadTotal')
         if not cart:
             cart = self.session['cart'] = {}
+            montoTotal = self.session['cartMontoTotal'] = '0'
+            cantidadTotal = self.session['cartCantidadTotal'] = '0'
 
         self.cart = cart
+        self.montoTotal = float(montoTotal)
+        self.cantidadTotal = int(cantidadTotal)
     
     def add(self,producto,cantidad):
         
@@ -42,8 +48,19 @@ class Cart:
 
     def clear(self):
         self.session['cart'] = {}
+        self.session['cartMontoTotal'] = '0'
+        self.session['cartCantidadTotal'] = '0'
 
     def save(self):
         ''' GUARDA CAMBIOS EN CARRITO '''
+        montoTotal = 0
+        cantidadTotal = 0
+
+        for key,value in self.cart.items():
+            montoTotal += float(value['subtotal'])
+            cantidadTotal += int(value['cantidad'])
+        
+        self.session['cartMontoTotal'] = "{:.2f}".format(montoTotal)
+        self.session['cartCantidadTotal'] = str(cantidadTotal)
         self.session['cart'] = self.cart
         self.session.modified = True

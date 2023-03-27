@@ -84,6 +84,9 @@ def agregarCarrito(request,producto_id):
 
     #print(request.session.get('cart'))
 
+    if request.method == 'GET':
+        return redirect('/')
+    
     return render(request,'carrito.html')
 
 def eliminarProductoCarrito(request,producto_id):
