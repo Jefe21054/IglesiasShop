@@ -34,6 +34,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'web',
+    'paypal.standard.ipn',
     'django_admin_tailwind',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -136,7 +137,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 MEDIA_URL = '/media/'
 
 
-#PAYPAL_TEST = True
+PAYPAL_TEST = True
 #PAYPAL_USER_EMAIL = config('PAYPAL_USER_EMAIL')
 
 #EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
