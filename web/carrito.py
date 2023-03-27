@@ -34,10 +34,14 @@ class Cart:
         self.save()
 
     def delete(self,producto):
-        pass
+        producto_id = str(producto.id)
+        
+        if producto_id in self.cart:
+            del self.cart[producto_id]
+            self.save()
 
     def clear(self):
-        pass
+        self.session['cart'] = {}
 
     def save(self):
         ''' GUARDA CAMBIOS EN CARRITO '''
