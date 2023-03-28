@@ -11,7 +11,7 @@ class Categoria(models.Model):
         return self.nombre
     
 class Producto(models.Model):
-    categoria = models.ForeignKey(Categoria, on_delete=models.RESTRICT)
+    categoria = models.ForeignKey(Categoria,on_delete=models.RESTRICT)
     nombre = models.CharField(max_length=200)
     descripcion = models.TextField(null=True)
     precio = models.DecimalField(max_digits=9,decimal_places=2)
@@ -22,7 +22,7 @@ class Producto(models.Model):
         return self.nombre
 
 class Cliente(models.Model):
-    usuario = models.OneToOneField(User, on_delete=models.RESTRICT)
+    usuario = models.OneToOneField(User,on_delete=models.RESTRICT)
     cedula = models.CharField(max_length=10)
     sexo = models.CharField(max_length=1,default='M')
     telefono = models.CharField(max_length=20)

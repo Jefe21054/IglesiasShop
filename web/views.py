@@ -125,11 +125,41 @@ def crearUsuario(request):
     
     return render(request,'login.html')
 
+def loginUsuario(request):
+    paginaDestino = request.GET.get('next',None)
+    context = {
+        'destino':paginaDestino,
+    }
+
+    if request.method == 'POST':
+        dataUsuario = request.POST['usuario']
+        dataPassword = request.POST['password']
+        dataDestino = request.POST['destino']
+
+        usuarioAuth = authenticate(request,username=dataUsuario,password=dataPassword)
+        if usuarioAuth is not None:
+            login(request,usuarioAuth)
+
+            if dataDestino != 'None':
+                return redirect(dataDestino)
+
+            return redirect('/')
+        else:
+            context = {
+                'mensajeError':'DATOS INCORRECTOS',
+            }
+
+    return render(request,'login.html',context)
+
+def logoutUsuario(request):
+    logout(request)
+    return render(request,'login.html')
+
 def cuentaUsuario(request):
-    
+
     try:
-        clienteEditar = Cliente.objects.get(usuario = request.user)
-        
+        clienteEditar = Cliente.objects.get(usuario=request.user)
+
         dataCliente = {
             'nombre':request.user.first_name,
             'apellidos':request.user.last_name,
@@ -146,31 +176,30 @@ def cuentaUsuario(request):
             'apellidos':request.user.last_name,
             'email':request.user.email,
         }
-
-
+    
     frmCliente = ClienteForm(dataCliente)
     context = {
         'frmCliente':frmCliente,
     }
-    
+
     return render(request,'cuenta.html',context)
 
 def actualizarCliente(request):
-    mensaje=''
+    mensaje = ''
 
     if request.method == 'POST':
         frmCliente = ClienteForm(request.POST)
         if frmCliente.is_valid():
             dataCliente = frmCliente.cleaned_data
 
-            #Actualizacion del Usuario
+            #Actualizar Usuario
             actUsuario = User.objects.get(pk=request.user.id)
             actUsuario.first_name = dataCliente['nombre']
             actUsuario.last_name = dataCliente['apellidos']
             actUsuario.email = dataCliente['email']
             actUsuario.save()
 
-            #Registro de Cliente
+            #Registrar Cliente
             nuevoCliente = Cliente()
             nuevoCliente.usuario = actUsuario
             nuevoCliente.cedula = dataCliente['cedula']
@@ -182,43 +211,12 @@ def actualizarCliente(request):
 
             mensaje = 'DATOS ACTUALIZADOS'
 
-    context ={
+    context = {
         'mensaje':mensaje,
         'frmCliente':frmCliente,
     }
-    
+
     return render(request,'cuenta.html',context)
-
-def loginUsuario(request):
-    paginaDestino = request.GET.get('next',None)
-    context = {
-        'destino':paginaDestino,
-    }
-
-    if request.method == 'POST':
-        dataUsuario = request.POST['usuario']
-        dataPassword = request.POST['password']
-        dataDestino = request.POST['destino']
-
-        usuarioAuth = authenticate(request,username=dataUsuario,password=dataPassword)
-        if usuarioAuth is not None:
-            login(request,usuarioAuth)
-            
-            if dataDestino != 'None':
-                return redirect(dataDestino)
-
-            return redirect('/cuenta')
-
-        else:
-            context = {
-                'mensajeError':'DATOS INCORRECTOS'
-            }
-
-    return render(request,'login.html',context)
-
-def logoutUsuario(request):
-    logout(request)
-    return render(request,'login.html')
 
 ''' VISTAS PARA EL PROCESO DE COMPRA '''
 
@@ -254,13 +252,13 @@ def registrarPedido(request):
 @login_required(login_url='/login')
 def confirmarPedido(request):
     context = {}
-    if request.method == "POST":
-        #actualizamos datos de usuario
+    if request.method == 'POST':
+        #Actualizar datos de usuario
         actUsuario = User.objects.get(pk=request.user.id)
         actUsuario.first_name = request.POST['nombre']
         actUsuario.last_name = request.POST['apellidos']
         actUsuario.save()
-        #registramos o actualizamos cliente
+        #Registro o actualizacion cliente
         try:
             clientePedido = Cliente.objects.get(usuario=request.user)
             clientePedido.telefono = request.POST['telefono']
@@ -272,14 +270,15 @@ def confirmarPedido(request):
             clientePedido.direccion = request.POST['direccion']
             clientePedido.telefono = request.POST['telefono']
             clientePedido.save()
-        #registramos nuevo pedido
+        #Registro de nuevo pedido
         nroPedido = ''
-        montoTotal = float(request.session.get('cartMontoTotal'))
+        auxi = float(request.session.get('cartMontoTotal'))
+        montoTotal = "{:.2f}".format(auxi)
         nuevoPedido = Pedido()
         nuevoPedido.cliente = clientePedido
         nuevoPedido.save()
-        
-        #registramos el detalle del pedido
+
+        #Registro detalle del pedido
         carritoPedido = request.session.get('cart')
         for key,value in carritoPedido.items():
             productoPedido = Producto.objects.get(pk=value['producto_id'])
@@ -287,66 +286,62 @@ def confirmarPedido(request):
             detalle.pedido = nuevoPedido
             detalle.producto = productoPedido
             detalle.cantidad = int(value['cantidad'])
-            detalle.subtotal = float(value['subtotal'])
+            auxi2 = float(value['subtotal'])
+            detalle.subtotal = "{:.2f}".format(auxi2)
             detalle.save()
-        
-        #actualizar pedido
+
+        #Actualizar pedido
         nroPedido = 'PED' + nuevoPedido.fecha_registro.strftime('%Y') + str(nuevoPedido.id)
         nuevoPedido.nro_pedido = nroPedido
         nuevoPedido.monto_total = montoTotal
         nuevoPedido.save()
-        
-        #registrar variable de sesion para el pedido
-        request.session['pedidoId'] = nuevoPedido.id
-        
-        #Creamos boton de paypal
+
+        #Creacion Boton Paypal
         paypal_dict = {
-        "business": settings.PAYPAL_USER_EMAIL,
-        "amount": montoTotal,
-        "item_name": "PEDIDO CODIGO : "+ nroPedido,
-        "invoice": nroPedido,
-        "notify_url": request.build_absolute_uri(reverse('paypal-ipn')),
-        "return": request.build_absolute_uri('/gracias'),
-        "cancel_return": request.build_absolute_uri('/')
+            "business": "sb-wa438t25381490@business.example.com",
+            "amount": montoTotal,
+            "item_name": "PEDIDO CODIGO: " + nroPedido,
+            "invoice": nroPedido,
+            "notify_url": request.build_absolute_uri(reverse('paypal-ipn')),
+            "return": request.build_absolute_uri('/gracias'),
+            "cancel_return": request.build_absolute_uri('/'),
         }
 
         # Create the instance.
         formPaypal = PayPalPaymentsForm(initial=paypal_dict)
-        
-        
+
         context = {
             'pedido':nuevoPedido,
-            'formPaypal':formPaypal
+            'formPaypal':formPaypal,
         }
-        
-        #limpiamos carrito de compras
+
+        #Limpiar carrito de compras
         carrito = Cart(request)
         carrito.clear()
-        
+
     return render(request,'compra.html',context)
 
 @login_required(login_url='/login')
 def gracias(request):
-    paypalId = request.GET.get('PayerID',None)
-    context = {}
-    if paypalId is not None:
-        pedidoId = request.session.get('pedidoId')
-        pedido = Pedido.objects.get(pk=pedidoId)
-        pedido.estado = '1'
-        pedido.save()
-        
-        send_mail(
-            'GRACIAS POR TU COMPRA',
-            'Tu nro de pedido es ' + pedido.nro_pedido,
-            settings.ADMIN_USER_EMAIL,
-            [request.user.email],
-            fail_silently=False,
-        )
-        
-        context = {
-            'pedido':pedido
-        }
-    else:
-        return redirect('/')
-        
-    return render(request,'gracias.html',context)
+    pass
+
+#Prueba de Paypal
+
+def view_that_asks_for_money(request):
+
+    # What you want the button to do.
+    paypal_dict = {
+        "business": "sb-wa438t25381490@business.example.com",
+        "amount": "1000.00",
+        "item_name": "Producto de Prueba EDteam",
+        "invoice": "100-EDT-25564",
+        "notify_url": request.build_absolute_uri(reverse('paypal-ipn')),
+        "return": request.build_absolute_uri('/'),
+        "cancel_return": request.build_absolute_uri('/logout'),
+        "custom": "premium_plan",  # Custom command to correlate to some function later (optional)
+    }
+
+    # Create the instance.
+    form = PayPalPaymentsForm(initial=paypal_dict)
+    context = {"form": form}
+    return render(request, "payment.html", context)

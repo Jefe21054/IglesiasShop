@@ -21,4 +21,5 @@ urlpatterns = [
     path('registrarPedido',views.registrarPedido,name='registrarPedido'),
     path('confirmarPedido',views.confirmarPedido,name='confirmarPedido'),
     path('gracias',views.gracias,name='gracias'),
+    path('pruebapaypal',views.view_that_asks_for_money,name='pruebapaypal'),
 ] 
