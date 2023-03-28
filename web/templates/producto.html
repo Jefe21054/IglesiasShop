@@ -1,9 +1,9 @@
 {% extends 'layout.html' %}
 {% block content %}
     <ul class="b-crumbs">
-        <li><a href="/">Home</a></li>
-        <li><a href="/">Catalog</a></li>
-        <li>Producto</li>
+        <li><a href="{% url 'web:index' %}">INICIO</a></li>
+        <li><a href="{% url 'web:index' %}">CATÁLOGO</a></li>
+        <li>PRODUCTO</li>
     </ul>
     <article>
     <div class="prod">
@@ -80,15 +80,15 @@
                                 <div class="label"><label >Сolor</label></div>
                                 <div class="value">
                                     <select>
-                                        <option value="">Choose an option</option>
-                                        <option value="black">Negro</option>
-                                        <option value="green">Verde</option>
-                                        <option value="white">Blanco</option>
+                                        <option value="">ELIGE COLOR</option>
+                                        <option value="black">NEGRO</option>
+                                        <option value="green">VERDE</option>
+                                        <option value="white">BLANCO</option>
                                     </select>
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" class="button"><i class="icon ion-android-cart"></i>Agregar al Carrito</button>
+                        <button type="submit" class="button"><i class="icon ion-android-cart"></i>AGREGAR AL CARRITO</button>
                         <p class="qnt-wrap prod-li-qnt">
                             <a href="#" class="qnt-plus prod-li-plus"><i class="icon ion-arrow-up-b"></i></a>
                             <input type="text" name="cantidad" value="1">

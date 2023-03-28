@@ -281,7 +281,7 @@ def confirmarPedido(request):
         #Registro detalle del pedido
         carritoPedido = request.session.get('cart')
         for key,value in carritoPedido.items():
-            productoPedido = Producto.objects.get(pk=value['producto_id'])
+            productoPedido = get_object_or_404(Producto,pk=value['producto_id'])
             detalle = PedidoDetalle()
             detalle.pedido = nuevoPedido
             detalle.producto = productoPedido
@@ -295,6 +295,9 @@ def confirmarPedido(request):
         nuevoPedido.nro_pedido = nroPedido
         nuevoPedido.monto_total = montoTotal
         nuevoPedido.save()
+
+        #Registrar variable de sesion para el pedido
+        request.session['pedidoId'] = nuevoPedido.id
 
         #Creacion Boton Paypal
         paypal_dict = {
@@ -323,25 +326,25 @@ def confirmarPedido(request):
 
 @login_required(login_url='/login')
 def gracias(request):
-    pass
+    paypalId = request.GET.get('PayerID',None)
+    context = {}
+    if paypalId is not None:
+        pedidoId = request.session.get('pedidoId')
+        pedido = get_object_or_404(Pedido,pk=pedidoId)
+        pedido.estado = '1'
+        pedido.save()
 
-#Prueba de Paypal
+        send_mail(
+            'GRACIAS POR TU COMPRA',
+            'Tu número de pedido es: ' + pedido.nro_pedido,
+            'ivaniglesias@contact.me',
+            [request.user.email],
+            fail_silently=False,
+        )
 
-def view_that_asks_for_money(request):
-
-    # What you want the button to do.
-    paypal_dict = {
-        "business": "sb-wa438t25381490@business.example.com",
-        "amount": "1000.00",
-        "item_name": "Producto de Prueba EDteam",
-        "invoice": "100-EDT-25564",
-        "notify_url": request.build_absolute_uri(reverse('paypal-ipn')),
-        "return": request.build_absolute_uri('/'),
-        "cancel_return": request.build_absolute_uri('/logout'),
-        "custom": "premium_plan",  # Custom command to correlate to some function later (optional)
-    }
-
-    # Create the instance.
-    form = PayPalPaymentsForm(initial=paypal_dict)
-    context = {"form": form}
-    return render(request, "payment.html", context)
+        context = {
+            'pedido':pedido,
+        }
+    else:
+        return redirect('/')
+    return render(request,'gracias.html',context)

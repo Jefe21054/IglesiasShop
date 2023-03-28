@@ -140,9 +140,9 @@ MEDIA_URL = '/media/'
 PAYPAL_TEST = True
 #PAYPAL_USER_EMAIL = config('PAYPAL_USER_EMAIL')
 
-#EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
-#EMAIL_HOST_USER = '38bfc5402955c8'
-#EMAIL_HOST_PASSWORD = 'b5d7e9c68e044b'
-#EMAIL_PORT = '2525'
+EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
+EMAIL_HOST_USER = '2faf564a6bc5eb'
+EMAIL_HOST_PASSWORD = 'e6d6feffc7e457'
+EMAIL_PORT = '2525'
 
 #ADMIN_USER_EMAIL = config('ADMIN_USER_EMAIL')

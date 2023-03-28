@@ -2,7 +2,7 @@
 {% block content %}
 <h1 class="maincont-ttl">Bienvenido - {{user.username}}</h1>
     <ul class="b-crumbs">
-        <li><a href="/">Home</a></li>
+        <li><a href="{% url 'web:index' %}">INICIO</a></li>
         <li>Mi Cuenta</li>
     </ul>
     <h2>{{mensaje}}</h2>

@@ -1,9 +1,9 @@
 {% extends 'layout.html' %}
 {% block content %}
-    <h1 class="maincont-ttl">Carrito</h1>
+    <h1 class="maincont-ttl">CARRITO</h1>
     <ul class="b-crumbs">
-        <li><a href="/">Home</a></li>
-        <li>Carrito</li>
+        <li><a href="{% url 'web:index' %}">INICIO</a></li>
+        <li>CARRITO</li>
     </ul>
     <div class="page-styling">
     <div class="woocommerce prod-litems section-list">
@@ -23,7 +23,7 @@
     No Space
     --><div class="prod-li-prices">
                     <div class="prod-li-price-wrap">
-                        <p>Precio</p>
+                        <p>PRECIO</p>
                         <p class="prod-li-price">${{value.precio}}</p>
                     </div>
                     <div class="prod-li-qnt-wrap">
@@ -34,7 +34,7 @@
                         </p>
                     </div>
                     <div class="prod-li-total-wrap">
-                        <p>Total</p>
+                        <p>TOTAL</p>
                         <p class="prod-li-total">${{value.subtotal}}</p>
                     </div>
                 </div><!--
@@ -58,13 +58,13 @@ No Space
             <div class="page-styling prod-li-informations">
 
                 <dl class="prod-li-props">
-                    <dt>Marca:</dt>
+                    <dt>MARCA:</dt>
                     <dd><a href="#">{{value.marca}}</a></dd>
-                    <dt>Peso:</dt>
+                    <dt>PESO:</dt>
                     <dd>{{value.peso}} kg</dd>
-                    <dt>Dimensiones:</dt>
+                    <dt>DIMENSIONES:</dt>
                     <dd>{{value.dimension}}</dd>
-                    <dt>Сolor:</dt>
+                    <dt>СOLOR:</dt>
                     <dd>{{value.color}}</dd>
                 </dl>
             </div>
@@ -82,7 +82,7 @@ No Space
             <a href="{% url 'web:limpiarCarrito' %}" class="checkout-button button">Limpiar Carrito</a>
             <a href="{% url 'web:registrarPedido' %}" class="checkout-button button">Realizar Pedido</a>
             <div class="order-total">
-                <p class="cart-totals-ttl">Total</p>
+                <p class="cart-totals-ttl">TOTAL</p>
                 <p class="cart-totals-val">${{request.session.cartMontoTotal}}</p>
             </div>
         </div>

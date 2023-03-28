@@ -2,8 +2,8 @@
 {% block content %}
 <h1 class="maincont-ttl">REGISTRO DE PEDIDO</h1>
     <ul class="b-crumbs">
-        <li><a href="/">Home</a></li>
-        <li>pedido</li>
+        <li><a href="{% url 'web:index' %}">INICIO</a></li>
+        <li>PEDIDO</li>
     </ul>
     <form method="post" action="{% url 'web:confirmarPedido' %}" class="register">
     {% csrf_token %}
@@ -11,24 +11,24 @@
         <div class="page-styling">
             <div class="auth-wrap">
                 <div class="auth-col">
-                    <h2>Datos Personales</h2>
+                    <h2>DATOS PERSONALES</h2>
                     <p>
-                        <label for="username">Nombre<span class="required">*</span></label>
+                        <label for="username">NOMBRE<span class="required">*</span></label>
                         {{frmCliente.nombre}}
                     </p>
                     <p>
-                        <label for="username">Apellidos<span class="required">*</span></label>
+                        <label for="username">APELLIDO<span class="required">*</span></label>
                         {{frmCliente.apellidos}}
                     </p>
                 </div>
                 <div class="auth-col">
-                    <h2>Datos Envío</h2>
+                    <h2>DATOS DE ENVÍO</h2>
                     <p>
-                        <label for="username">Teléfono<span class="required">*</span></label>
+                        <label for="username">TELÉFONO<span class="required">*</span></label>
                         {{frmCliente.telefono}}
                     </p>
                     <p>
-                        <label for="username">Dirección<span class="required">*</span></label>
+                        <label for="username">DIRECCIÓN<span class="required">*</span></label>
                         {{frmCliente.direccion}}
                     </p>
                 </div>
@@ -37,7 +37,7 @@
     </article>
     <article class="page-cont">
         <div class="page-styling">
-            <h2>Confirmación de Productos</h2>
+            <h2>CONFIRMACIÓN DE PRODUCTOS</h2>
             <div class="woocommerce prod-litems section-list">
                 {% for key,value in request.session.cart.items %}
                 <article class="prod-li sectls">
@@ -54,7 +54,7 @@
                             </div>
                             <div class="prod-li-prices">
                                 <div class="prod-li-price-wrap">
-                                    <p>Precio</p>
+                                    <p>PRECIO</p>
                                     <p class="prod-li-price">${{value.precio}}</p>
                                 </div>
                             </div>
@@ -66,7 +66,7 @@
                                 </p>
                             </div>
                             <div class="prod-li-total-wrap">
-                                <p>Total</p>
+                                <p>TOTAL</p>
                                 <p class="prod-li-total">${{value.subtotal}}</p>
                             </div>
                         </div>
@@ -77,7 +77,7 @@
         <div class="cart-actions">
                 <div class="cart-collaterals">
                     <div class="order-total">
-                        <p class="cart-totals-ttl">Total</p>
+                        <p class="cart-totals-ttl">TOTAL</p>
                         <p class="cart-totals-val">${{request.session.cartMontoTotal}}</p>
                     </div>
                 </div>
