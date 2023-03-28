@@ -22,12 +22,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-ag6p*o@dx3jp2^v240l2!#2&vcm9%ivch21ai7&og%s=)-*2-h'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = config('DEBUG',default=False,cast=bool)
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [config('ALLOWED_HOSTS')]
 
 
 # Application definition
@@ -81,11 +81,11 @@ WSGI_APPLICATION = 'IglesiasShop.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'db_shop',
-        'USER': 'jefe21054',
-        'PASSWORD': 'admin',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
+        'NAME': config('DATABASE_NAME'),
+        'USER': config('DATABASE_USER'),
+        'PASSWORD': config('DATABASE_PASS'),
+        'HOST': config('DATABASE_HOST'),
+        'PORT': config('DATABASE_PORT'),
     }
 }
 
@@ -137,13 +137,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 MEDIA_URL = '/media/'
 
+PAYPAL_TEST = config('PAYPAL_TEST',default=True,cast=bool)
+PAYPAL_USER_EMAIL = config('PAYPAL_USER_EMAIL')
 
-PAYPAL_TEST = True
-#PAYPAL_USER_EMAIL = config('PAYPAL_USER_EMAIL')
+EMAIL_HOST = config('EMAIL_HOST')
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+EMAIL_PORT = config('EMAIL_PORT')
 
-EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
-EMAIL_HOST_USER = '2faf564a6bc5eb'
-EMAIL_HOST_PASSWORD = 'e6d6feffc7e457'
-EMAIL_PORT = '2525'
-
-#ADMIN_USER_EMAIL = config('ADMIN_USER_EMAIL')
+ADMIN_USER_EMAIL = config('ADMIN_USER_EMAIL')

@@ -301,7 +301,7 @@ def confirmarPedido(request):
 
         #Creacion Boton Paypal
         paypal_dict = {
-            "business": "sb-wa438t25381490@business.example.com",
+            "business": settings.PAYPAL_USER_EMAIL,
             "amount": montoTotal,
             "item_name": "PEDIDO CODIGO: " + nroPedido,
             "invoice": nroPedido,
@@ -337,7 +337,7 @@ def gracias(request):
         send_mail(
             'GRACIAS POR TU COMPRA',
             'Tu número de pedido es: ' + pedido.nro_pedido,
-            'ivaniglesias@contact.me',
+            settings.ADMIN_USER_EMAIL,
             [request.user.email],
             fail_silently=False,
         )
