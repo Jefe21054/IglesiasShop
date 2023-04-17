@@ -32,10 +32,10 @@ class Cart:
             #Actualizacion del producto en Carrito
             for key,value in self.cart.items():
                 if key == str(producto.id):
-                   value['cantidad'] = str(int(value['cantidad']) + cantidad)
-                   res = float(value['cantidad']) * float(value['precio'])
-                   value['subtotal'] = "{:.2f}".format(res)
-                   break
+                    value['cantidad'] = str(int(value['cantidad']) + cantidad)
+                    res = float(value['cantidad']) * float(value['precio'])
+                    value['subtotal'] = "{:.2f}".format(res)
+                    break
 
         self.save()
 
